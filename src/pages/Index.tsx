@@ -8,40 +8,59 @@ type Tab = 'home' | 'photos' | 'videos';
 
 const photos = [
   {
-    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/941031fb-9fce-495a-8c0c-8671be9dc1c9.jpg',
-    caption: 'Пушистая красотка',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Rattus_norvegicus_-_Brown_rat_02.jpg/800px-Rattus_norvegicus_-_Brown_rat_02.jpg',
+    caption: 'Рыженькая умница',
   },
   {
-    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/d4c6c395-1e00-45ed-8086-8e8013c61f89.jpg',
-    caption: 'Любопытный носик',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Rattus_norvegicus_domestica_white.jpg/800px-Rattus_norvegicus_domestica_white.jpg',
+    caption: 'Белоснежная красотка',
   },
   {
-    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/c3bce22e-fbc8-410d-bdf2-205fdd596841.jpg',
-    caption: 'Вкусное лакомство',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Fancy_rat_hugging_-_20080810.jpg/800px-Fancy_rat_hugging_-_20080810.jpg',
+    caption: 'Обнимашки',
   },
   {
-    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/e9fe2812-3eea-4a7b-922f-94aee2fe1c5f.jpg',
-    caption: 'Сонные ушки',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Fancy_rat_hugging.jpg/800px-Fancy_rat_hugging.jpg',
+    caption: 'Лучшие друзья',
   },
   {
-    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/ee85fff8-6121-44bd-80da-7a8579d64fec.jpg',
-    caption: 'Обнимашки вдвоём',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Fancy_rat_- _%281%29_-_geograph.org.uk_-_1178756.jpg/800px-Fancy_rat_-_%281%29_-_geograph.org.uk_-_1178756.jpg',
+    caption: 'Любопытный взгляд',
   },
-  { url: RAT_IMG, caption: 'Классический портрет' },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Ratte_Zuchtform.jpg/800px-Ratte_Zuchtform.jpg',
+    caption: 'Крыска-модница',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Rattus_norvegicus_Berkenhout%2C_1769_%28Rodentia%2C_Muridae%29_%286116712657%29.jpg/800px-Rattus_norvegicus_Berkenhout%2C_1769_%28Rodentia%2C_Muridae%29_%286116712657%29.jpg',
+    caption: 'Маленький исследователь',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Fancy_Rat_Tricolor.jpg/800px-Fancy_Rat_Tricolor.jpg',
+    caption: 'Трёхцветная красавица',
+  },
+  {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Black_hooded_rat.jpg/800px-Black_hooded_rat.jpg',
+    caption: 'Чёрный капюшон',
+  },
 ];
 
 const videos = [
   {
-    src: 'https://rutube.ru/play/embed/c6cc4d620b1d4338901770a44b3e82f4',
-    title: 'Декоративные крысы — Rutube',
+    src: 'https://vk.com/video_ext.php?oid=-237415732&id=456239017&hd=2',
+    title: 'Декоративные крыски — VK',
   },
   {
-    src: 'https://vk.com/video_ext.php?oid=-22822305&id=456239569&hd=2',
-    title: 'Милые крыски — VK Видео',
+    src: 'https://vk.com/video_ext.php?oid=-237415732&id=456239020&hd=2',
+    title: 'Крысиный уют — VK',
   },
   {
-    src: 'https://rutube.ru/play/embed/c6cc4d620b1d4338901770a44b3e82f4',
-    title: 'Уход за крысками — Rutube',
+    src: 'https://vk.com/video_ext.php?oid=-188817799&id=456239029&hd=2',
+    title: 'Милые крысята — VK',
+  },
+  {
+    src: 'https://vk.com/video_ext.php?oid=-49385995&id=456239554&hd=2',
+    title: 'Игры крысок — VK',
   },
 ];
 
@@ -184,27 +203,26 @@ export default function Index() {
                 </div>
               </div>
 
-              {/* Крыска с носиком */}
+              {/* Крыска — кликай куда угодно, она пискнет */}
               <div className="relative flex justify-center animate-float-slow">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl scale-90" />
-                  <img
-                    src={RAT_IMG}
-                    alt="Декоративная крыса"
-                    className={`relative w-72 h-72 md:w-80 md:h-80 object-cover rounded-full border-4 border-primary/30 ${
-                      squeak ? 'animate-squeak' : ''
-                    }`}
-                  />
-                  {/* кликабельный носик */}
                   <button
                     onClick={handleSqueak}
-                    aria-label="Пискнуть носиком"
-                    className="absolute left-1/2 top-[56%] -translate-x-1/2 w-16 h-16 rounded-full cursor-pointer group"
+                    aria-label="Нажми на крыску — она пискнет"
+                    className={`relative block w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-4 cursor-pointer transition-all
+                      ${squeak ? 'border-primary scale-95 brightness-125' : 'border-primary/30 hover:border-primary/70 hover:scale-105'}
+                    `}
                   >
-                    <span className="absolute inset-0 rounded-full ring-2 ring-primary/0 group-hover:ring-primary/60 group-hover:bg-primary/15 group-active:bg-primary/40 transition-all" />
+                    <img
+                      src={RAT_IMG}
+                      alt="Декоративная крыса"
+                      className="w-full h-full object-cover"
+                    />
+                    <span className="absolute inset-0 rounded-full bg-primary/0 hover:bg-primary/10 transition-colors" />
                   </button>
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-secondary/80 backdrop-blur border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
-                    👆 нажми на носик — она пискнет
+                    👆 нажми на крыску — она пискнет
                   </div>
                 </div>
               </div>
