@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 
 const RAT_IMG =
@@ -7,18 +7,42 @@ const RAT_IMG =
 type Tab = 'home' | 'photos' | 'videos';
 
 const photos = [
-  { url: RAT_IMG, caption: 'Задумчивая крыска' },
-  { url: RAT_IMG, caption: 'Милый носик' },
-  { url: RAT_IMG, caption: 'Пушистые ушки' },
-  { url: RAT_IMG, caption: 'Внимательный взгляд' },
-  { url: RAT_IMG, caption: 'Любопытная мордочка' },
-  { url: RAT_IMG, caption: 'Уютный портрет' },
+  {
+    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/941031fb-9fce-495a-8c0c-8671be9dc1c9.jpg',
+    caption: 'Пушистая красотка',
+  },
+  {
+    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/d4c6c395-1e00-45ed-8086-8e8013c61f89.jpg',
+    caption: 'Любопытный носик',
+  },
+  {
+    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/c3bce22e-fbc8-410d-bdf2-205fdd596841.jpg',
+    caption: 'Вкусное лакомство',
+  },
+  {
+    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/e9fe2812-3eea-4a7b-922f-94aee2fe1c5f.jpg',
+    caption: 'Сонные ушки',
+  },
+  {
+    url: 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/ee85fff8-6121-44bd-80da-7a8579d64fec.jpg',
+    caption: 'Обнимашки вдвоём',
+  },
+  { url: RAT_IMG, caption: 'Классический портрет' },
 ];
 
 const videos = [
-  { id: 'dQw4w9WgXcQ', title: 'Крыска играет' },
-  { id: 'dQw4w9WgXcQ', title: 'Утренний уход' },
-  { id: 'dQw4w9WgXcQ', title: 'Крыска ест лакомство' },
+  {
+    src: 'https://rutube.ru/play/embed/c6cc4d620b1d4338901770a44b3e82f4',
+    title: 'Декоративные крысы — Rutube',
+  },
+  {
+    src: 'https://vk.com/video_ext.php?oid=-22822305&id=456239569&hd=2',
+    title: 'Милые крыски — VK Видео',
+  },
+  {
+    src: 'https://rutube.ru/play/embed/c6cc4d620b1d4338901770a44b3e82f4',
+    title: 'Уход за крысками — Rutube',
+  },
 ];
 
 const Star = ({ style }: { style: React.CSSProperties }) => (
@@ -32,29 +56,44 @@ export default function Index() {
   const [tab, setTab] = useState<Tab>('home');
   const [squeak, setSqueak] = useState(false);
 
-  const handleSqueak = () => {
-    setSqueak(true);
-    setTimeout(() => setSqueak(false), 400);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const playSqueak = () => {
     try {
       const AudioCtx =
         window.AudioContext ||
         (window as unknown as { webkitAudioContext: typeof AudioContext })
           .webkitAudioContext;
-      const ctx = new AudioCtx();
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new AudioCtx();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      const now = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(1400, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(2200, ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      osc.frequency.setValueAtTime(1500, now);
+      osc.frequency.exponentialRampToValueAtTime(2600, now + 0.08);
+      osc.frequency.exponentialRampToValueAtTime(1900, now + 0.2);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.35, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.25);
+      osc.start(now);
+      osc.stop(now + 0.3);
     } catch (e) {
       void e;
     }
+  };
+
+  const handleSqueak = () => {
+    setSqueak(true);
+    setTimeout(() => setSqueak(false), 400);
+    playSqueak();
   };
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
@@ -160,9 +199,9 @@ export default function Index() {
                   <button
                     onClick={handleSqueak}
                     aria-label="Пискнуть носиком"
-                    className="absolute left-1/2 top-[58%] -translate-x-1/2 w-12 h-12 rounded-full cursor-pointer group"
+                    className="absolute left-1/2 top-[56%] -translate-x-1/2 w-16 h-16 rounded-full cursor-pointer group"
                   >
-                    <span className="absolute inset-0 rounded-full bg-primary/0 group-hover:bg-primary/20 group-active:bg-primary/40 transition-colors" />
+                    <span className="absolute inset-0 rounded-full ring-2 ring-primary/0 group-hover:ring-primary/60 group-hover:bg-primary/15 group-active:bg-primary/40 transition-all" />
                   </button>
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-secondary/80 backdrop-blur border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
                     👆 нажми на носик — она пискнет
@@ -218,7 +257,7 @@ export default function Index() {
                   <div className="aspect-video">
                     <iframe
                       className="w-full h-full"
-                      src={`https://www.youtube.com/embed/${v.id}`}
+                      src={v.src}
                       title={v.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
