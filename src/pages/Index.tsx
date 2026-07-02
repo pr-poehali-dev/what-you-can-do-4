@@ -1,17 +1,240 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import Icon from '@/components/ui/icon';
 
-const Index = () => {
+const RAT_IMG =
+  'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/d8b621c3-f477-4360-a461-3c6e42a3726b.jpg';
+
+type Tab = 'home' | 'photos' | 'videos';
+
+const photos = [
+  { url: RAT_IMG, caption: 'Задумчивая крыска' },
+  { url: RAT_IMG, caption: 'Милый носик' },
+  { url: RAT_IMG, caption: 'Пушистые ушки' },
+  { url: RAT_IMG, caption: 'Внимательный взгляд' },
+  { url: RAT_IMG, caption: 'Любопытная мордочка' },
+  { url: RAT_IMG, caption: 'Уютный портрет' },
+];
+
+const videos = [
+  { id: 'dQw4w9WgXcQ', title: 'Крыска играет' },
+  { id: 'dQw4w9WgXcQ', title: 'Утренний уход' },
+  { id: 'dQw4w9WgXcQ', title: 'Крыска ест лакомство' },
+];
+
+const Star = ({ style }: { style: React.CSSProperties }) => (
+  <span
+    className="absolute rounded-full bg-primary/70 animate-twinkle"
+    style={style}
+  />
+);
+
+export default function Index() {
+  const [tab, setTab] = useState<Tab>('home');
+  const [squeak, setSqueak] = useState(false);
+
+  const handleSqueak = () => {
+    setSqueak(true);
+    setTimeout(() => setSqueak(false), 400);
+    try {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(2200, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } catch (e) {
+      void e;
+    }
+  };
+
+  const tabs: { key: Tab; label: string; icon: string }[] = [
+    { key: 'home', label: 'Главная', icon: 'Home' },
+    { key: 'photos', label: 'Фото', icon: 'Image' },
+    { key: 'videos', label: 'Видео', icon: 'Play' },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* атмосферный фон */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-primary/20 blur-[120px]" />
+        <div className="absolute top-1/3 -right-40 w-[450px] h-[450px] rounded-full bg-accent/20 blur-[120px]" />
+        {Array.from({ length: 30 }).map((_, i) => (
+          <Star
+            key={i}
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 3 + 1}px`,
+              height: `${Math.random() * 3 + 1}px`,
+              animationDelay: `${Math.random() * 4}s`,
+            }}
+          />
+        ))}
       </div>
-      <span className="absolute bottom-8 left-1/2 -translate-x-1/2 inline-block bg-[#FF6637] text-white text-sm px-4 py-2 rounded-full whitespace-nowrap">
-        Подождите 5 минут, Юра создает первую версию проекта с нуля
-      </span>
+
+      {/* Навигация */}
+      <header className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🐀</span>
+          <span className="font-display text-2xl font-semibold tracking-wide">
+            Крысиный&nbsp;Мир
+          </span>
+        </div>
+        <nav className="flex gap-1 md:gap-2 bg-secondary/50 backdrop-blur rounded-full p-1 border border-border">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex items-center gap-2 px-4 md:px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                tab === t.key
+                  ? 'bg-primary text-primary-foreground glow-purple'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Icon name={t.icon} size={16} />
+              <span className="hidden sm:inline">{t.label}</span>
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      <main className="relative z-10 px-6 md:px-12 pb-20">
+        {tab === 'home' && (
+          <section className="max-w-5xl mx-auto pt-8 md:pt-16">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              {/* Цитата */}
+              <div className="animate-fade-in">
+                <p className="uppercase tracking-[0.3em] text-primary text-xs mb-6">
+                  Декоративные крысы
+                </p>
+                <h1 className="font-display text-4xl md:text-6xl leading-tight mb-6">
+                  «Маленькие лапки{' '}
+                  <span className="text-gradient italic">оставляют</span>{' '}
+                  большой след в сердце»
+                </h1>
+                <p className="text-muted-foreground text-lg mb-10 max-w-md">
+                  Умные, ласковые и невероятно обаятельные. Погрузись в
+                  уютный мир декоративных крыс.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <button
+                    onClick={() => setTab('photos')}
+                    className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium glow-purple hover:scale-105 transition-transform"
+                  >
+                    <Icon name="Image" size={18} />
+                    Смотреть фото
+                  </button>
+                  <button
+                    onClick={() => setTab('videos')}
+                    className="flex items-center gap-2 border border-border bg-secondary/50 backdrop-blur px-6 py-3 rounded-full font-medium hover:scale-105 hover:border-primary transition-all"
+                  >
+                    <Icon name="Play" size={18} />
+                    Смотреть видео
+                  </button>
+                </div>
+              </div>
+
+              {/* Крыска с носиком */}
+              <div className="relative flex justify-center animate-float-slow">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl scale-90" />
+                  <img
+                    src={RAT_IMG}
+                    alt="Декоративная крыса"
+                    className={`relative w-72 h-72 md:w-80 md:h-80 object-cover rounded-full border-4 border-primary/30 ${
+                      squeak ? 'animate-squeak' : ''
+                    }`}
+                  />
+                  {/* кликабельный носик */}
+                  <button
+                    onClick={handleSqueak}
+                    aria-label="Пискнуть носиком"
+                    className="absolute left-1/2 top-[58%] -translate-x-1/2 w-12 h-12 rounded-full cursor-pointer group"
+                  >
+                    <span className="absolute inset-0 rounded-full bg-primary/0 group-hover:bg-primary/20 group-active:bg-primary/40 transition-colors" />
+                  </button>
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-secondary/80 backdrop-blur border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
+                    👆 нажми на носик — она пискнет
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {tab === 'photos' && (
+          <section className="max-w-6xl mx-auto pt-8 animate-fade-in">
+            <h2 className="font-display text-4xl md:text-5xl mb-2 text-center">
+              Галерея <span className="text-gradient">крысок</span>
+            </h2>
+            <p className="text-center text-muted-foreground mb-10">
+              Самые милые мордочки в чёрно-фиолетовых тонах
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {photos.map((p, i) => (
+                <figure
+                  key={i}
+                  className="group relative overflow-hidden rounded-3xl border border-border bg-card hover:border-primary transition-colors"
+                >
+                  <img
+                    src={p.url}
+                    alt={p.caption}
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <figcaption className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-background/90 to-transparent p-4 font-display text-lg">
+                    {p.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {tab === 'videos' && (
+          <section className="max-w-6xl mx-auto pt-8 animate-fade-in">
+            <h2 className="font-display text-4xl md:text-5xl mb-2 text-center">
+              Видео с <span className="text-gradient">крысками</span>
+            </h2>
+            <p className="text-center text-muted-foreground mb-10">
+              Забавные и трогательные моменты
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videos.map((v, i) => (
+                <div
+                  key={i}
+                  className="rounded-3xl overflow-hidden border border-border bg-card hover:border-primary transition-colors"
+                >
+                  <div className="aspect-video">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${v.id}`}
+                      title={v.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="p-4 font-display text-lg">{v.title}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+
+      <footer className="relative z-10 text-center text-muted-foreground text-sm pb-8">
+        Сделано с 💜 для любителей декоративных крыс
+      </footer>
     </div>
   );
-};
-
-export default Index;
+}
