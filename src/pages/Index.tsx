@@ -2,10 +2,9 @@ import { useState, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 
 const CDN = 'https://cdn.poehali.dev/projects/b8e9b107-d738-4e55-ae4c-ce87d966227a/files/';
-
 const RAT_IMG = CDN + 'd8b621c3-f477-4360-a461-3c6e42a3726b.jpg';
 
-type Tab = 'home' | 'photos' | 'videos';
+type Tab = 'home' | 'photos' | 'videos' | 'history' | 'games';
 
 const photos = [
   { url: CDN + 'd8b621c3-f477-4360-a461-3c6e42a3726b.jpg', caption: 'Задумчивый портрет' },
@@ -24,6 +23,30 @@ const videos = [
   { src: 'https://vk.com/video_ext.php?oid=-237415732&id=456239020&hd=2', title: 'Крысиный уют' },
   { src: 'https://vk.com/video_ext.php?oid=-188817799&id=456239029&hd=2', title: 'Милые крысята' },
   { src: 'https://vk.com/video_ext.php?oid=-49385995&id=456239554&hd=2', title: 'Игры крысок' },
+];
+
+const historyParagraphs = [
+  'Почему-то у людей бытует мнение, что предок декоративной мыши — мышь белая — была выведена исключительно для нужд лаборатории. На самом деле, в лабораторию эти мышки попали гораздо позднее (примерно в 20-ые годы прошлого века).',
+  'Кто привёз этих мышек в Европу, точно не известно. А вот родина белой мыши — Япония и Китай. Первые белые мыши появились более 2000 лет назад, их содержали в качестве домашних питомцев, а в некоторых странах считали священным животным.',
+  'Кому-то это покажется странным — вредный, казалось бы, грызун, вызывающий неприязнь у многих людей, и вдруг — украшение дома и священное животное. Современная наука давно доказала, что не существует вредных животных, и само применение термина «вредный» безграмотно по отношению к какому-либо биологическому виду.',
+  'Народы Востока хорошо знали о вреде, причиняемом домашнему хозяйству полевыми и домовыми мышами. Однако они оценили мышь не как вредителя, а как животное в целом. Именно китайцы первыми обратили внимание на такие качества мышей, как: чистоплотность, дружелюбный нрав, неприхотливость и почти уникальную приспосабливаемость.',
+  'Одним из отражений культа мыши у многих народов является календарь. Ведь именно в восточном календаре первый год двенадцатилетнего цикла посвящён мыши. А сколько легенд и сказок есть про мышей... И в большинстве из них мышка показывается именно с положительной стороны: в российских сказках мышка выступает в качестве маленького помощника положительных героев, в китайских и индийских — показаны её ум и смекалистость.',
+  'В результате длительной селекции мыши утратили большинство отрицательных черт своих диких предков. Мышь декоративная отличается от дикой, как болонка от волка. Современная декоративная мышь завоевала Европу наравне с другими домашними питомцами. Вы только посмотрите, какие они красивые! А если взять мышку в руки и погладить — она расправит ушки и прикроет глазки от удовольствия. И вы сразу поймёте, что бояться тут абсолютно некого.',
+];
+
+const games = [
+  {
+    img: CDN + '6420c78b-6673-4899-8562-2ce0d62dbdbf.jpg',
+    title: 'Мыши: Эволюция',
+    desc: 'Развивай своих мышек от простых грызунов до удивительных существ!',
+    url: 'https://yandex.ru/games/app/myshi-evoliutsiia-123261',
+  },
+  {
+    img: CDN + 'b9f085c5-e8d3-42fa-812a-4ae95763c270.jpg',
+    title: 'Мышиное приключение',
+    desc: 'Весёлая игра про храброго мышонка, покоряющего большой мир.',
+    url: 'https://yandex.ru/games/app/311046',
+  },
 ];
 
 const Star = ({ style }: { style: React.CSSProperties }) => (
@@ -71,6 +94,8 @@ export default function Index() {
     { key: 'home', label: 'Главная', icon: 'Home' },
     { key: 'photos', label: 'Фото', icon: 'Image' },
     { key: 'videos', label: 'Видео', icon: 'Play' },
+    { key: 'history', label: 'История', icon: 'BookOpen' },
+    { key: 'games', label: 'Игры', icon: 'Gamepad2' },
   ];
 
   return (
@@ -91,23 +116,23 @@ export default function Index() {
       </div>
 
       {/* Навигация */}
-      <header className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6">
+      <header className="relative z-10 flex items-center justify-between px-4 md:px-12 py-5 flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🐀</span>
           <span className="font-display text-2xl font-semibold tracking-wide">Крысиный&nbsp;Мир</span>
         </div>
-        <nav className="flex gap-1 md:gap-2 bg-secondary/50 backdrop-blur rounded-full p-1 border border-border">
+        <nav className="flex gap-1 bg-secondary/50 backdrop-blur rounded-full p-1 border border-border flex-wrap justify-center">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 md:px-5 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 tab === t.key
                   ? 'bg-primary text-primary-foreground glow-purple'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon name={t.icon} size={16} />
+              <Icon name={t.icon} size={15} />
               <span className="hidden sm:inline">{t.label}</span>
             </button>
           ))}
@@ -131,24 +156,15 @@ export default function Index() {
                   Умные, ласковые и невероятно обаятельные. Погрузись в уютный мир декоративных крыс.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <button
-                    onClick={() => setTab('photos')}
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium glow-purple hover:scale-105 transition-transform"
-                  >
-                    <Icon name="Image" size={18} />
-                    Смотреть фото
+                  <button onClick={() => setTab('photos')} className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium glow-purple hover:scale-105 transition-transform">
+                    <Icon name="Image" size={18} />Смотреть фото
                   </button>
-                  <button
-                    onClick={() => setTab('videos')}
-                    className="flex items-center gap-2 border border-border bg-secondary/50 backdrop-blur px-6 py-3 rounded-full font-medium hover:scale-105 hover:border-primary transition-all"
-                  >
-                    <Icon name="Play" size={18} />
-                    Смотреть видео
+                  <button onClick={() => setTab('videos')} className="flex items-center gap-2 border border-border bg-secondary/50 backdrop-blur px-6 py-3 rounded-full font-medium hover:scale-105 hover:border-primary transition-all">
+                    <Icon name="Play" size={18} />Смотреть видео
                   </button>
                 </div>
               </div>
 
-              {/* Крыска — клик по всей картинке */}
               <div className="relative flex justify-center animate-float-slow">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl scale-90" />
@@ -156,17 +172,12 @@ export default function Index() {
                     onClick={handleSqueak}
                     aria-label="Нажми на крыску — она пискнет"
                     className={`relative block w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-4 cursor-pointer transition-all duration-200
-                      ${squeak
-                        ? 'border-primary scale-95 brightness-150'
-                        : 'border-primary/30 hover:border-primary/70 hover:scale-105'
-                      }`}
+                      ${squeak ? 'border-primary scale-95 brightness-150' : 'border-primary/30 hover:border-primary/70 hover:scale-105'}`}
                   >
                     <img src={RAT_IMG} alt="Декоративная крыса" className="w-full h-full object-cover" />
                     <span className="absolute inset-0 rounded-full bg-primary/0 hover:bg-primary/10 transition-colors" />
                     {squeak && (
-                      <span className="absolute inset-0 flex items-center justify-center text-4xl animate-scale-in">
-                        💜
-                      </span>
+                      <span className="absolute inset-0 flex items-center justify-center text-4xl animate-scale-in">💜</span>
                     )}
                   </button>
                   <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-secondary/80 backdrop-blur border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
@@ -184,21 +195,11 @@ export default function Index() {
             <h2 className="font-display text-4xl md:text-5xl mb-2 text-center">
               Галерея <span className="text-gradient">крысок</span>
             </h2>
-            <p className="text-center text-muted-foreground mb-10">
-              Нажми на фото — и оно увеличится
-            </p>
+            <p className="text-center text-muted-foreground mb-10">Нажми на фото — и оно увеличится</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {photos.map((p, i) => (
-                <figure
-                  key={i}
-                  onClick={() => setLightbox(p)}
-                  className="group relative overflow-hidden rounded-3xl border border-border bg-card hover:border-primary transition-all cursor-zoom-in"
-                >
-                  <img
-                    src={p.url}
-                    alt={p.caption}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+                <figure key={i} onClick={() => setLightbox(p)} className="group relative overflow-hidden rounded-3xl border border-border bg-card hover:border-primary transition-all cursor-zoom-in">
+                  <img src={p.url} alt={p.caption} className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                     <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 rounded-full p-2">
                       <Icon name="ZoomIn" size={20} className="text-white" />
@@ -224,16 +225,87 @@ export default function Index() {
               {videos.map((v, i) => (
                 <div key={i} className="rounded-3xl overflow-hidden border border-border bg-card hover:border-primary transition-colors">
                   <div className="aspect-video">
-                    <iframe
-                      className="w-full h-full"
-                      src={v.src}
-                      title={v.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                    <iframe className="w-full h-full" src={v.src} title={v.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                   </div>
                   <div className="p-4 font-display text-lg">{v.title}</div>
                 </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ИСТОРИЯ */}
+        {tab === 'history' && (
+          <section className="max-w-3xl mx-auto pt-8 animate-fade-in">
+            <h2 className="font-display text-4xl md:text-5xl mb-2 text-center">
+              История <span className="text-gradient">мышки</span>
+            </h2>
+            <p className="text-center text-muted-foreground mb-12">Откуда пришли наши любимые питомцы</p>
+
+            <div className="relative">
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-primary/60 via-primary/30 to-transparent hidden sm:block" />
+              <div className="space-y-6">
+                {historyParagraphs.map((para, i) => (
+                  <div key={i} className="flex gap-6 items-start">
+                    <div className="hidden sm:flex flex-col items-center flex-shrink-0">
+                      <div className="w-3 h-3 rounded-full bg-primary glow-purple mt-2" />
+                    </div>
+                    <div className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors">
+                      <p className="text-foreground/90 leading-relaxed text-base">{para}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-12 flex justify-center">
+              <div className="bg-primary/10 border border-primary/30 rounded-2xl p-6 max-w-md text-center">
+                <span className="text-4xl mb-3 block">🐀</span>
+                <p className="font-display text-xl text-primary">«Мышка — не вредитель, а друг»</p>
+                <p className="text-muted-foreground text-sm mt-2">Народы Востока знали это тысячи лет</p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ИГРЫ */}
+        {tab === 'games' && (
+          <section className="max-w-4xl mx-auto pt-8 animate-fade-in">
+            <h2 className="font-display text-4xl md:text-5xl mb-2 text-center">
+              Игры про <span className="text-gradient">мышек</span>
+            </h2>
+            <p className="text-center text-muted-foreground mb-12">Нажми на игру — и играй прямо сейчас!</p>
+
+            <div className="grid sm:grid-cols-2 gap-8">
+              {games.map((g, i) => (
+                <a
+                  key={i}
+                  href={g.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block rounded-3xl overflow-hidden border border-border bg-card hover:border-primary transition-all hover:scale-105 cursor-pointer"
+                >
+                  <div className="relative overflow-hidden aspect-video">
+                    <img src={g.img} alt={g.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                      <div className="bg-primary/90 rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100">
+                        <Icon name="Play" size={28} className="text-white" />
+                      </div>
+                    </div>
+                    <div className="absolute top-3 right-3 bg-black/60 backdrop-blur rounded-full px-3 py-1 text-xs text-white flex items-center gap-1">
+                      <Icon name="ExternalLink" size={12} />
+                      Яндекс Игры
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-2xl mb-2 group-hover:text-primary transition-colors">{g.title}</h3>
+                    <p className="text-muted-foreground text-sm">{g.desc}</p>
+                    <div className="mt-4 flex items-center gap-2 text-primary text-sm font-medium">
+                      <Icon name="Gamepad2" size={16} />
+                      Играть бесплатно
+                    </div>
+                  </div>
+                </a>
               ))}
             </div>
           </section>
@@ -246,23 +318,12 @@ export default function Index() {
 
       {/* Лайтбокс */}
       {lightbox && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
-          onClick={() => setLightbox(null)}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4" onClick={() => setLightbox(null)}>
           <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => setLightbox(null)}
-              className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors flex items-center gap-2 text-sm"
-            >
-              <Icon name="X" size={20} />
-              Закрыть
+            <button onClick={() => setLightbox(null)} className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors flex items-center gap-2 text-sm">
+              <Icon name="X" size={20} />Закрыть
             </button>
-            <img
-              src={lightbox.url}
-              alt={lightbox.caption}
-              className="w-full max-h-[80vh] object-contain rounded-2xl border border-primary/30"
-            />
+            <img src={lightbox.url} alt={lightbox.caption} className="w-full max-h-[80vh] object-contain rounded-2xl border border-primary/30" />
             <p className="text-center font-display text-xl text-white/90 mt-4">{lightbox.caption}</p>
           </div>
         </div>
