@@ -87,6 +87,16 @@ export default function Index() {
   const [tab, setTab] = useState<Tab>('home');
   const [squeak, setSqueak] = useState(false);
   const [lightbox, setLightbox] = useState<{ url: string; caption: string } | null>(null);
+  const [trapState, setTrapState] = useState<'normal' | 'burning' | 'ash'>('normal');
+  const trapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTrap = () => {
+    if (trapState !== 'normal') return;
+    setTrapState('burning');
+    trapTimerRef.current = setTimeout(() => {
+      setTrapState('ash');
+    }, 7000);
+  };
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const playSqueak = () => {
@@ -338,6 +348,68 @@ export default function Index() {
                   </div>
                 </a>
               ))}
+            </div>
+
+            {/* Мышеловка */}
+            <div className="mt-16 flex flex-col items-center gap-4">
+              <p className="text-muted-foreground text-sm">
+                {trapState === 'normal' && '👇 А это что тут такое...'}
+                {trapState === 'burning' && '🔥 Горит! Горит!'}
+                {trapState === 'ash' && '💀 Справедливость восстановлена'}
+              </p>
+
+              <div
+                className={`relative cursor-pointer transition-all duration-500 ${
+                  trapState === 'normal' ? 'hover:scale-110' : ''
+                } ${trapState === 'burning' ? 'animate-pulse' : ''}`}
+                onClick={handleTrap}
+              >
+                {/* обычная мышеловка */}
+                <img
+                  src={CDN + 'd673a6a0-6ca4-4995-a9d1-72e5de10ec72.jpg'}
+                  alt="Мышеловка"
+                  className={`w-64 h-64 object-cover rounded-2xl border-2 border-border transition-all duration-700 ${
+                    trapState === 'normal' ? 'opacity-100' : 'opacity-0 absolute inset-0'
+                  }`}
+                />
+                {/* горящая */}
+                <img
+                  src={CDN + 'ad8c3094-6116-4eeb-a1a1-8c2910b5271f.jpg'}
+                  alt="Мышеловка горит"
+                  className={`w-64 h-64 object-cover rounded-2xl border-2 border-orange-500 transition-all duration-700 ${
+                    trapState === 'burning' ? 'opacity-100' : 'opacity-0 absolute inset-0'
+                  }`}
+                  style={{ filter: trapState === 'burning' ? 'drop-shadow(0 0 24px orange)' : 'none' }}
+                />
+                {/* пепел */}
+                <img
+                  src={CDN + 'b994cdb7-f4e0-4cb3-8c3e-e9dd6a1f3595.jpg'}
+                  alt="Пепел"
+                  className={`w-64 h-64 object-cover rounded-2xl border-2 border-primary/30 transition-all duration-700 ${
+                    trapState === 'ash' ? 'opacity-100' : 'opacity-0 absolute inset-0'
+                  }`}
+                />
+
+                {trapState === 'normal' && (
+                  <div className="absolute inset-0 flex items-end justify-center pb-3">
+                    <span className="bg-black/70 backdrop-blur text-white text-xs rounded-full px-3 py-1">
+                      нажми, если осмелишься 😈
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {trapState === 'ash' && (
+                <div className="text-center animate-fade-in">
+                  <p className="font-display text-2xl text-primary">🏳️ Это тебе за мышек!</p>
+                  <button
+                    onClick={() => setTrapState('normal')}
+                    className="mt-3 text-xs text-muted-foreground hover:text-foreground underline transition-colors"
+                  >
+                    поставить новую мышеловку
+                  </button>
+                </div>
+              )}
             </div>
           </section>
         )}
