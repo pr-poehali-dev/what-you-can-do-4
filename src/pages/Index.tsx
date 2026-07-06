@@ -35,6 +35,13 @@ const Star = ({ style }: { style: React.CSSProperties }) => (
 
 export default function Index() {
   const [tab, setTab] = useState<Tab>('home');
+  const [sinking, setSinking] = useState(false);
+
+  const handlePaperClick = () => {
+    if (sinking) return;
+    setSinking(true);
+    setTimeout(() => setSinking(false), 3000);
+  };
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: 'home', label: 'Главная', icon: 'Home' },
@@ -109,12 +116,26 @@ export default function Index() {
                 </div>
               </div>
 
-              <div className="relative flex justify-center animate-float-slow">
+              <div className={`relative flex justify-center ${sinking ? '' : 'animate-float-slow'}`}>
                 <div className="relative">
                   <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-3xl scale-90" />
-                  <div className="relative block w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden border-4 border-primary/30">
+                  <button
+                    onClick={handlePaperClick}
+                    aria-label="Нажми на листок — он утонет"
+                    className={`relative block w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden border-4 border-primary/30 cursor-pointer transition-all duration-[3000ms] ease-in ${
+                      sinking ? 'translate-y-40 scale-75 opacity-0 rotate-6' : 'hover:scale-105'
+                    }`}
+                  >
                     <img src={PAPER_IMG} alt="Лист А4 в море" className="w-full h-full object-cover" />
-                  </div>
+                    {sinking && (
+                      <span className="absolute inset-0 bg-primary/30 animate-pulse" />
+                    )}
+                  </button>
+                  {!sinking && (
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-secondary/80 backdrop-blur border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
+                      👆 нажми на листок
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
